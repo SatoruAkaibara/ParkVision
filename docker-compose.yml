@@ -1,0 +1,52 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: parkvision-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: parkvision-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/parkvision
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./frontend
+    container_name: parkvision-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BACKEND_URL=http://localhost:5000
+    depends_on:
+      - backend
+
+  ai-engine:
+    build: ./ai-engine
+    container_name: parkvision-ai
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/parkvision
+      - BACKEND_URL=http://backend:5000
+    depends_on:
+      - backend
+      - mongodb
+    # WARNING: This block tells Docker to use the host's NVIDIA GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+volumes:
+  mongo_data:

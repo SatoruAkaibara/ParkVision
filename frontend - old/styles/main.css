@@ -1,0 +1,313 @@
+:root {
+    /* Apple Dark Mode Palette */
+    --bg-color: #000000;
+    --card-bg: rgba(28, 28, 30, 0.65);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #FFFFFF;
+    --text-secondary: #86868b;
+
+    /* Status Colors */
+    --color-vacant: #30D158;
+    /* iOS Green */
+    --color-occupied: #FF453A;
+    /* iOS Red */
+    --glow-vacant: rgba(48, 209, 88, 0.4);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- Ambient Background Effects --- */
+.ambient-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    z-index: -1;
+}
+
+.glow-1 {
+    top: -20%;
+    left: -20%;
+    background: blue;
+}
+
+.glow-2 {
+    bottom: -20%;
+    right: -20%;
+    background: purple;
+}
+
+/* --- Main App Frame --- */
+.app-container {
+    width: 100%;
+    max-width: 480px;
+    /* Mobile width */
+    height: 90vh;
+    background: rgba(40, 40, 40, 0.3);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    /* Safari support */
+    border: 1px solid var(--card-border);
+    border-radius: 40px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Header --- */
+header {
+    margin-bottom: 30px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.status-badge {
+    background: rgba(48, 209, 88, 0.15);
+    color: var(--color-vacant);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-vacant);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+/* --- The Grid --- */
+.grid-container {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 Columns */
+    gap: 15px;
+    overflow-y: auto;
+    align-content: start;
+}
+
+/* --- The Parking Spot Card --- */
+.parking-spot {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    /* Apple 'ease-out' */
+}
+
+.parking-spot .spot-id {
+    font-size: 16px;
+    font-weight: 600;
+    opacity: 0.5;
+}
+
+.parking-spot .icon-state {
+    font-family: 'Material Symbols Rounded';
+    font-size: 48px;
+    align-self: center;
+    transition: transform 0.4s ease;
+}
+
+.parking-spot .label {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* --- STATE: Vacant (The Hero) --- */
+.parking-spot.vacant {
+    border-color: var(--color-vacant);
+    box-shadow: 0 0 20px var(--glow-vacant);
+    background: rgba(48, 209, 88, 0.05);
+}
+
+.parking-spot.vacant .icon-state {
+    color: var(--color-vacant);
+}
+
+.parking-spot.vacant .label {
+    color: var(--color-vacant);
+}
+
+/* --- STATE: Occupied (Receded) --- */
+.parking-spot.occupied {
+    opacity: 0.7;
+    /* Fades back slightly */
+}
+
+.parking-spot.occupied .icon-state {
+    color: var(--color-occupied);
+    transform: scale(0.9);
+    /* Subtle shrink */
+}
+
+.parking-spot.occupied .label {
+    color: var(--color-occupied);
+}
+
+/* --- Loader --- */
+.loading-state {
+    grid-column: span 2;
+    text-align: center;
+    color: var(--text-secondary);
+    margin-top: 50px;
+}
+
+/* --- Footer Stats --- */
+footer {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid var(--card-border);
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item span {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.stat-item label {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* --- MAP VIEW STYLES --- */
+
+.map-wrapper {
+    position: relative;
+    /* Acts as the anchor */
+    width: 100%;
+    max-width: 1000px;
+    /* Limit size for desktop */
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+#parking-image {
+    width: 100%;
+    /* Responsive width */
+    height: auto;
+    display: block;
+    /* Removes bottom gap */
+    opacity: 0.6;
+    /* Dim the photo so boxes pop */
+}
+
+#overlay-layer {
+    position: absolute;
+    /* Floats on top of image */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Let clicks pass through to image */
+}
+
+/* The Overlay Box */
+.spot-overlay {
+    position: absolute;
+    border-radius: 8px;
+    /* Softer corners */
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Apple-style easing */
+    backdrop-filter: blur(2px);
+}
+
+.spot-overlay.vacant {
+    background: rgba(48, 209, 88, 0.25);
+    border-color: #30D158;
+    box-shadow: 0 4px 15px rgba(48, 209, 88, 0.3);
+}
+
+.spot-overlay.occupied {
+    background: rgba(255, 69, 58, 0.1);
+    /* Duller red */
+    border-color: rgba(255, 69, 58, 0.4);
+    opacity: 0.6;
+    /* Looks "taken" and less important */
+}
+
+/* Make the labels smaller and more elegant */
+.spot-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+}
